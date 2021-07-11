@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="testFlow" doc:id="ab01600f-751f-4f3a-80f2-c335d295eb8b" >
+		<http:listener doc:name="Listener" doc:id="604a843c-e433-4cbe-9a3f-923dfb0818da" config-ref="HTTP_Listener_config" path="/test"/>
+		<flow-ref doc:name="Flow Reference" doc:id="e394f301-c098-4077-9727-9ccde949db6c" name="testSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="70c244ee-ce91-419d-9c57-5682f8d0cc5c" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="5a93968d-db28-48b9-b4e2-a215e057eb90" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload ++ {grade:vars.grade default ""}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<sub-flow name="testSub_Flow" doc:id="667ff9b4-6698-4814-a4cb-fdc73e79d6fd" >
+		<ee:transform doc:name="Transform Message" doc:id="557f3597-1fd6-475e-b0e2-590b4e1db910" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"grade" : "A"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="c99a79a0-f270-46ba-b64a-321521dbae5a" variableName="cusgrade"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1a737bd0-ae40-4c7d-b1d5-75de874c14a7" message="#[payload]"/>
+	</sub-flow>
+</mule>
