@@ -17,6 +17,7 @@ output application/json
 payload ++ {grade:vars.grade default ""}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="f7a9416c-2319-4254-8d63-1feaae29e553" message="#[payload]"/>
 	</flow>
 	<sub-flow name="testSub_Flow" doc:id="667ff9b4-6698-4814-a4cb-fdc73e79d6fd" >
 		<ee:transform doc:name="Transform Message" doc:id="557f3597-1fd6-475e-b0e2-590b4e1db910" >
